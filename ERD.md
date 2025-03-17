@@ -1,2 +1,1 @@
-Link to ERD: https://app.diagrams.net/#G1g0J0wRGVMb5WEjb5aTt2wlhAiASeUnNz#%7B%22pageId%22%3A%22qySLgyuOuRl0hPtBiPzY%22%7D
-
+Link to ERD: https://drive.google.com/file/d/1g0J0wRGVMb5WEjb5aTt2wlhAiASeUnNz/view?usp=sharing
