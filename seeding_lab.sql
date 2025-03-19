@@ -1,3 +1,4 @@
+-- Challenge 3, Seeding the Database
 -- TO CONNECT AND POPULATE THE DATABASE lab_mysql --
 USE `lab_mysql`;
 
