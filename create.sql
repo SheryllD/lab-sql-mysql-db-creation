@@ -1,64 +1,73 @@
--- Challenge 1: Design the Database (ERD)
--- Challenge 2 - Create the Database and Tables
+-- Challenge 1 & 2: Design and Create the Database
 
--- DROP DATABASE lab_mysql
+-- Create the database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS `lab_mysql`;
+USE `lab_mysql`;
 
-CREATE DATABASE IF NOT EXISTS lab_mysql;
-USE lab_mysql; 
+-- Drop existing tables to any avoid conflicts
+DROP TABLE IF EXISTS Invoices;
+DROP TABLE IF EXISTS Cars;
+DROP TABLE IF EXISTS Customers;
+DROP TABLE IF EXISTS Salespersons;
 
-DROP TABLE IF EXISTS Cars; 
+-- Create Cars table
 CREATE TABLE `Cars` (
-`Car_ID` INT PRIMARY KEY, 
-`VIN` VARCHAR(30) NOT NULL, 
-`Manufacturer` VARCHAR(30) NOT NULL, 
-`Model` VARCHAR(30) NOT NULL, 
-`Year` date NOT NULL,
-`Color` VARCHAR(30)   
+    id INT AUTO_INCREMENT PRIMARY KEY,           
+    vin VARCHAR(50) UNIQUE NOT NULL,             
+    manufacturer VARCHAR(30) NOT NULL,
+    model VARCHAR(30) NOT NULL,
+    year YEAR NOT NULL,
+    color VARCHAR(30)
 );
 
-DROP TABLE IF EXISTS Customers; 
+-- Create Customers table
 CREATE TABLE `Customers` (
-`Customer_ID` INT PRIMARY KEY,
-`Customer_Name` VARCHAR(50),
-`Phone_Number` float, 
-`Email` VARCHAR(50), 
-`Address` VARCHAR(50), 
-`City` VARCHAR(50), 
-`State` VARCHAR(50), 
-`Country` VARCHAR(50), 
-`Postal_Code` VARCHAR(50) 
-); 
+    id INT AUTO_INCREMENT PRIMARY KEY,           
+    customer_id INT UNIQUE,                     
+    customer_name VARCHAR(50) NOT NULL,
+    customer_phone_number VARCHAR(20),
+    customer_email VARCHAR(50),
+    customer_address VARCHAR(50),
+    customer_city VARCHAR(50),
+    customer_state VARCHAR(50),
+    customer_country VARCHAR(50),
+    customer_postal_code VARCHAR(20)
+);
 
-DROP TABLE IF EXISTS Salesperson; 
-CREATE TABLE `Salesperson`(
-`Staff_ID` INT PRIMARY KEY, 
-`Salesperson_Name` VARCHAR(50),
-`Company_Store` VARCHAR(50)
-); 
+-- Create Salespersons table
+CREATE TABLE `Salespersons` (
+    id INT AUTO_INCREMENT PRIMARY KEY,           
+    staff_id INT UNIQUE,                        
+    salesperson_name VARCHAR(50) NOT NULL,
+    company_store VARCHAR(50)
+);
 
-DROP TABLE IF EXISTS Invoices; 
-CREATE TABLE `Invoices`(
-`Invoice_ID` INT PRIMARY KEY,
-`Invoice_Number` INT,
-`Date` date,
-`Customer_ID` INT, 
-`Staff_ID` INT, 
-`Car_ID` INT, 
-`Company_Store` VARCHAR(50)
-); 
+-- Create Invoices table
+CREATE TABLE `Invoices` (
+	id INT AUTO_INCREMENT PRIMARY KEY,           
+    invoice_number BIGINT NOT NULL,
+    invoice_date DATE NOT NULL,
+    car_id INT NOT NULL,
+    customer_id INT NOT NULL,
+    staff_id INT NOT NULL,
+    company_store VARCHAR(50),
 
+-- Defining foreign key relationships
+FOREIGN KEY (car_id) REFERENCES Cars(id),
+FOREIGN KEY (customer_id) REFERENCES Customers(id),
+FOREIGN KEY (staff_id) REFERENCES Salespersons(id)
+);
+
+-- Show all tables to confirm
 SHOW TABLES;
- 
-SELECT * FROM Cars; 
-SELECT * FROM Customers; 
-SELECT * FROM Invoices;
-SELECT * FROM Salesperson;
 
--- Defining Relations Between Foreign Keys 
-
-ALTER TABLE Invoices 
-ADD FOREIGN KEY (Car_ID) REFERENCES Cars(Car_ID), 
-ADD FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
-ADD FOREIGN KEY (Staff_ID) REFERENCES Salesperson(Staff_id);
-
-
+-- Optional: Check relationships in INFORMATION_SCHEMA
+SELECT 
+    TABLE_NAME, COLUMN_NAME, CONSTRAINT_NAME,
+    REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME
+FROM 
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE
+WHERE 
+    TABLE_SCHEMA = 'lab_mysql'
+    AND TABLE_NAME = 'Invoices'
+    AND REFERENCED_TABLE_NAME IS NOT NULL;
